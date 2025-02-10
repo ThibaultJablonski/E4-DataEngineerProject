@@ -7,8 +7,9 @@
 #     https://docs.scrapy.org/en/latest/topics/downloader-middleware.html
 #     https://docs.scrapy.org/en/latest/topics/spider-middleware.html
 
-BOT_NAME = "snep"
+BOT_NAME = "snep" #Nom du projet
 
+# Modules où Scrapy cherche les spiders
 SPIDER_MODULES = ["snep.spiders"]
 NEWSPIDER_MODULE = "snep.spiders"
 

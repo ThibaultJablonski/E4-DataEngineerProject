@@ -17,14 +17,14 @@ def create_layout():
             dbc.Navbar(
                 dbc.Container(
                     [
-                        # 🔹 Lien "Thibault²" à gauche
+                        #  Lien "Thibault²" à gauche
                         dbc.NavbarBrand(
                             html.A("Thibault²", href="/", className="navbar-home-link"),
                             className="mr-auto",
                         ),
 
-                        # 🔹 Titre centré
-                        # 🔹 Titre stylisé avec image de fond
+                        #  Titre centré
+                        #  Titre stylisé avec image de fond
                         html.Div(
                             style={
                                 "backgroundImage": "url('/assets/banner.png')",
@@ -47,7 +47,7 @@ def create_layout():
                         ),
 
 
-                        # 🔹 Liens à droite
+                        #  Liens à droite
                         dbc.Nav(
                             [
                                 dbc.DropdownMenu(
@@ -76,7 +76,7 @@ def create_layout():
 
             html.Div(id="page-content", className="content"),
 
-            snep_footer(),  # 📌 Footer ajouté ici
+            snep_footer(),  #  Footer ajouté ici
         ],
-        className="d-flex flex-column min-vh-100",  # 🔥 CSS pour pousser le footer en bas
+        className="d-flex flex-column min-vh-100",  #  CSS pour pousser le footer en bas
     )

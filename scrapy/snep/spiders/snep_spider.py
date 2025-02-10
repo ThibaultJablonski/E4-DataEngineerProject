@@ -8,6 +8,7 @@ class CertificationsSpider(scrapy.Spider):
     start_urls = ["https://snepmusique.com/les-certifications/?categories=Albums"]
 
     def parse(self, response):
+        #On récupère tous les blocs HTML
         certifications = response.xpath("//div[contains(@class, 'certification')]")
         count = 0  # Compteur pour limiter à 10
 
@@ -15,28 +16,35 @@ class CertificationsSpider(scrapy.Spider):
             if count >= 10:  # Arrêter après 10 éléments
                 break
             
+            #On filtre uniquement les albums et pas autre chose (Pour éviter les singles et vidéos)
             categorie = cert.xpath(".//div[@class='categorie']/text()").get()
             if not categorie or "albums" not in categorie.lower():
                 self.logger.info(f"Ignoré (non album) : {categorie if categorie else 'Catégorie non trouvée'}")
                 continue  # Ignorer les certifications qui ne sont pas des albums
 
-
+            #Extraction des dates
             date_sortie = self.extract_date(cert, "Date de sortie")
             date_constat = self.extract_date(cert, "Date de constat")
 
+            # Check des années pour éviter des données aberrantes
             if not self.is_valid_year(date_sortie) or not self.is_valid_year(date_constat):
                 continue
 
+            # Nettoyage des données brutes extraites du HTML
             album_name = cert.xpath(".//div[contains(@class, 'titre')]/text()").get("").strip()
             artiste_name = cert.xpath(".//div[contains(@class, 'artiste')]/text()").get("").strip()
             label_name = cert.xpath(".//div[contains(@class, 'editeur')]/text()").get("").strip()
             certification_type = cert.xpath(".//div[contains(@class, 'certif')]/text()").get("").strip()
 
+            # Génération d'IDs uniques pour la base de données
             album_id = self.generate_id(album_name)
             artiste_id = self.generate_id(artiste_name)
             label_id = self.generate_id(label_name)
             certification_id = self.generate_id(f"{album_id}_{certification_type}")
 
+
+            # Création des objets structurés pour MongoDB
+            # Chaque yield envoie les données au pipeline de traitement
             yield AlbumItem(_id=album_id, nom=album_name, artiste_id=artiste_id, label_id=label_id, date_sortie=date_sortie)
             yield ArtisteItem(_id=artiste_id, nom=artiste_name)
             yield LabelItem(_id=label_id, nom=label_name)
@@ -45,17 +53,20 @@ class CertificationsSpider(scrapy.Spider):
             count += 1  # Incrémenter le compteur
 
     def extract_date(self, cert, date_type):
+        # Méthode qui permet d'extraire une date spécifique d'un HTML
         date_raw = cert.xpath(f".//div[@class='block_dates']/div[contains(., '{date_type}')]/text()").get()
         return self.format_date(date_raw.strip() if date_raw else None)
 
     def format_date(self, date_raw):
+        # Conversion des dates FR (JJ/MM/AAAA) vers le format ISO (AAAA-MM-JJ)
         try:
             return datetime.strptime(date_raw, "%d/%m/%Y").strftime("%Y-%m-%d")
         except (ValueError, TypeError):
             return None
 
     def is_valid_year(self, date):
-        return date and 2015 <= int(date.split("-")[0]) <= 2025
+        return date and 2015 < int(date.split("-")[0]) <= 2025
 
     def generate_id(self, name):
+        # Génération d'un ID lisible pour MongoDB (ex: "PNL" -> "pnl")
         return re.sub(r"\W+", "_", name.strip().lower())

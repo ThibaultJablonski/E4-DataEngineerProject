@@ -6,7 +6,7 @@ es = Elasticsearch([ELASTIC_HOST])
 
 def search_elasticsearch(query, index):
     body = {
-        "_source": ["nom", "album_id", "artiste_id", "label_id", "type", "date_sortie"],  # ✅ Ajout de "date_sortie"
+        "_source": ["nom", "album_id", "artiste_id", "label_id", "type", "date_sortie"],  #  Ajout de "date_sortie"
         "query": {
             "multi_match": {
                 "query": query,
@@ -20,13 +20,13 @@ def search_elasticsearch(query, index):
         res = es.search(index=index, body=body)
 
         for hit in res["hits"]["hits"]:
-            hit["_source"]["_id"] = hit["_id"]  # 🔥 Ajout manuel de _id
+            hit["_source"]["_id"] = hit["_id"]  #  Ajout manuel de _id
             results.append(hit["_source"])
 
     except Exception as e:
-        print(f"❌ Erreur Elasticsearch : {e}")
+        print("f Erreur Elasticsearch : {e}")
 
-    return results  # 🔥 Toujours retourner une liste
+    return results  #  Toujours retourner une liste
 
 
 
@@ -49,15 +49,15 @@ def get_artist_details(artist_name):
         return "Aucun artiste trouvé."
 
     first_artist = artist_results[0]
-    artist_id = first_artist.get("_id")  # 🔥 On utilise .get() pour éviter KeyError
+    artist_id = first_artist.get("_id")  #  On utilise .get() pour éviter KeyError
 
 
     artist_nom = first_artist.get("nom", "Nom Inconnu")
 
-    # 🔎 Étape 2 : Trouver tous les albums de cet artiste
+    #  Trouver tous les albums de cet artiste
     albums = get_albums_by_artist(artist_id)
 
-    # 🔎 Étape 3 : Récupérer les certifications de ces albums
+    #  Récupérer les certifications de ces albums
     final_data = []
     for album in albums:
         album_id = album.get("_id", "ID Album Inconnu")
@@ -95,7 +95,7 @@ def get_artist_details(artist_name):
 def get_album_details(album_name):
     """ Récupère l'artiste, le label et la certification d'un album donné """
     
-    # 🔎 Étape 1 : Trouver l'album
+    # Trouver l'album
     album_results = search_elasticsearch(album_name, "albums")
 
     if not album_results:
@@ -103,28 +103,28 @@ def get_album_details(album_name):
 
     first_album = album_results[0]  # On prend le premier album trouvé
 
-    # 🔥 Définition sécurisée des valeurs
+    # Définition sécurisée des valeurs
     album_nom = first_album.get("nom", "Nom Album Inconnu")
     album_id = first_album.get("_id", "ID Album Inconnu")
     artiste_id = first_album.get("artiste_id", "ID Artiste Inconnu")
     label_id = first_album.get("label_id", "Label Inconnu")
     date_sortie = first_album.get("date_sortie", "Date Inconnue")
 
-    # 🔎 Trouver l'artiste
+    #Trouver l'artiste
     artist_results = search_elasticsearch(artiste_id, "artistes")
     artiste_nom = next(
         (artist["nom"] for artist in artist_results),
         f"ID {artiste_id}"
     )
 
-    # 🔎 Trouver le label
+    # Trouver le label
     label_results = search_elasticsearch(label_id, "labels")
     label_nom = next(
         (label["nom"] for label in label_results),
         f"{label_id}"
     )
 
-    # 🔎 Trouver les certifications
+    # Trouver les certifications
     certifications = get_certifications_by_album(album_id)
 
     final_data = []
@@ -144,7 +144,7 @@ def get_album_details(album_name):
 def get_certifications_by_label(label_name):
     """ Récupère tous les albums d'un label et leurs certifications """
 
-    # 🔎 Étape 1 : Trouver le label
+    # Trouver le label
     
     label_results = search_elasticsearch(label_name, "labels")
 
@@ -155,14 +155,14 @@ def get_certifications_by_label(label_name):
     label_id = first_label.get("_id", "ID Label Inconnu")
     label_nom = first_label.get("nom", "Nom Label Inconnu")
 
-    # 🔎 Étape 2 : Trouver tous les albums de ce label
+    #Trouver tous les albums de ce label
 
     albums = search_elasticsearch(label_id, "albums")
 
     if not albums:
         return "Aucun album trouvé pour ce label."
 
-    # 🔎 Étape 3 : Trouver les certifications des albums
+    # Trouver les certifications des albums
     final_data = []
     for album in albums:
         album_id = album.get("_id", "ID Album Inconnu")
@@ -208,12 +208,12 @@ def get_albums_by_artist(artist_id):
 
         albums = []
         for hit in res["hits"]["hits"]:
-            hit["_source"]["_id"] = hit["_id"]  # 🔥 Ajout manuel de _id
+            hit["_source"]["_id"] = hit["_id"]  # Ajout manuel de _id
             albums.append(hit["_source"])
 
         return albums
     except Exception as e:
-        print(f"❌ Erreur Elasticsearch (get_albums_by_artist) : {e}")
+        print(f"Erreur Elasticsearch (get_albums_by_artist) : {e}")
         return []
 
 

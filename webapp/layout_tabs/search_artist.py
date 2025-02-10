@@ -45,7 +45,7 @@ def register_callbacks(app):
 
         if isinstance(results, str):
             return results  # Aucun résultat trouvé
-        # Définition des colonnes avec des emojis 🏆🎶🏷️📅
+        # Définition des colonnes avec des emojis 
         columns = {
             "artiste": "🎤 Artiste",
             "album": "💿 Album",

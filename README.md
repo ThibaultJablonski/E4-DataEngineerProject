@@ -12,7 +12,12 @@ Durant notre projet, nous avons eu quelques soucis concernant le scraping. En ef
 Nous avons donc dû malheureusement prendre sans filtres et changer dans notre spider.
  Nous avons enlevé tout ce qui était des singles et vidéos et ne pas stocker dans la base de données si la date de sortie était avant 2016.
 Ce code n'est actuellement pas présent dans la spider actuelle car le scraping mettant plus de 3 heures à se faire, nous avons stockés les données dans des fichiers JSON pour pouvoir les réutiliser par la suite via ElasticSearch. Alors pour la démonstration de scraping, nous avons fait un scraping de 10 données. Pour le constater, aller sur ce lien : http://localhost:8081/
+Le mot de passe et le nom d'utilisateur sont : admin
+
+
 Pour la suite du projet, nous avons donc décidé d'utiliser ElasticSearch et Dash pour l'application.
+Dans le code actuel de la spider, il y a une fonction is_valid_year(). Cette fonction permet de ne pas aller trop loin dans la date.
+Cette fonction a été utilisé pour le scraping des données stockées dans les fichiers JSON et elle a été gardée ici, bien qu'elle ne sert à rien car le scraping se fait en commençant par le plus jeune.
 
 
 ---
@@ -54,7 +59,12 @@ Assurez-vous d'avoir installé **Docker** et **Docker Compose** sur votre machin
 ### 2. Cloner le projet
 ```sh
 $ git clone https://github.com/ThibaultJablonski/E4-DataEngineerProject
-$ cd snep-dashboard
+```
+
+Se rendre sur le dossier que tu as cloné
+
+```sh
+$ cd E4-DataEngineerProjet
 ```
 
 ### 3. Lancer les services Docker

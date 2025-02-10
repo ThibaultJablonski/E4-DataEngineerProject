@@ -41,7 +41,7 @@ def get_layout():
                 className="text-center"
             ),
 
-            # 📷 Ajout des images
+            # Ajout des images
             html.Div(
                 [
                     dbc.Row(

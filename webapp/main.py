@@ -15,12 +15,12 @@ app.layout = html.Div([
     dcc.Location(id="url", refresh=False),
     create_layout()
 ])
-
+#  Enregistrement des callbacks pour chaque module
 artist_callbacks(app)
 album_callbacks(app)
 label_callbacks(app)
 
-# 🔀 Callback pour afficher le bon contenu selon la page
+#  Callback pour afficher le bon contenu selon la page
 @app.callback(Output("page-content", "children"), Input("url", "pathname"))
 def display_page(pathname):
     if pathname == "/search_artist":
