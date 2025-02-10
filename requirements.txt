@@ -1,0 +1,8 @@
+scrapy
+flask
+elasticsearch
+dash
+dash-bootstrap-components
+numpy
+pandas
+pymongo

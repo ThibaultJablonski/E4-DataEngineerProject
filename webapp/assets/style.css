@@ -1,0 +1,20 @@
+.navbar-title {
+    font-size: 20px;
+    font-weight: bold;
+    color: #b0b0b0; /* Gris */
+    text-align: center;
+    flex-grow: 1; /* Permet de centrer le texte */
+}
+
+/* Style du lien "Thibault²" */
+.navbar-home-link {
+    font-size: 20px;
+    font-weight: bold;
+    color: white; /* Texte blanc */
+    text-decoration: none;
+    padding: 10px;
+}
+
+.navbar-home-link:hover {
+    color: #b0b0b0; /* Gris clair au survol */
+}
