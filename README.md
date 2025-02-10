@@ -61,7 +61,7 @@ Assurez-vous d'avoir installé **Docker** et **Docker Compose** sur votre machin
 $ git clone https://github.com/ThibaultJablonski/E4-DataEngineerProject
 ```
 
-Se rendre sur le dossier que tu as cloné
+Se rendre sur le dossier que vous avez cloné
 
 ```sh
 $ cd E4-DataEngineerProjet
